@@ -1,3 +1,5 @@
+import * as Tone from 'tone'
+
 const synthSettings = {
   volume: 0.8,
   detune: 0,
@@ -28,18 +30,16 @@ function initWebAudio() {
 function initAndStartSynth() {
   const synthNode = new Tone.Synth(synthSettings).toDestination()
 
-  // prettier-ignore
-  const seq = new Tone.Sequence(
+  const pattern = new Tone.Pattern(
     (time, note) => {
-      synthNode.triggerAttackRelease(note, 0.1, time)
+      synthNode.triggerAttackRelease(note, '8n', time)
     },
-    [
-      'C4', 'E4', 'G4', 'A4', 'C4', 'E4', 'G4', 'A4',
-      ['C4', 'C4'], ['E4', 'E4'], ['G4', 'G4'], ['A4', 'A4'], ['C4', 'C4'], ['E4', 'E4'], ['G4', 'G4'], ['A4', 'A4'],
-      ['C4', null, null, null], [null, null, 'E4', null], [null, null, 'G4', null], [null, null, null, null],
-      ['C4', 'C4', 'C4', 'C4'], ['E4', 'E4', 'E4', 'E4'], ['G4', 'G4', 'G4', 'G4'], ['A4', 'A4', 'A4', 'A4']
-    ]
-  ).start(0)
+    ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'],
+    'upDown' // "up", "down", "upDown", "random"
+  )
+
+  pattern.interval = '8n'
+  pattern.start(0)
 
   const transport = Tone.getTransport()
   transport.bpm.value = 60
